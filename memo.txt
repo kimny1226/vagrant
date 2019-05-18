@@ -1,0 +1,55 @@
+
+
+cat /etc/redhat-release
+
+
+vagrant plugin install vagrant-vbguest
+
+
+
+■CentOS7.5に最新バージョンのDockerをインストールする
+https://qiita.com/okcoder/items/e91f1e339c114e0be129
+
+  公式
+  https://docs.docker.com/install/linux/docker-ce/centos/#uninstall-old-versions
+
+#古いdocker 削除
+sudo yum remove docker  docker-client  docker-client-latest  docker-common  docker-latest  docker-latest-logrotate  docker-logrotate  docker-selinux  docker-engine-selinux  docker-engine
+
+
+#
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+sudo yum install docker-ce -y
+
+
+
+sudo systemctl enable docker
+sudo systemctl start docker
+
+
+
+sudo usermod -aG docker $USER
+
+
+
+■docker-composeの最新Verでインストール
+https://qiita.com/fake-deli-ca/items/955f648036fe803e4f33
+
+#!/bin/bash
+compose_version=$(curl https://api.github.com/repos/docker/compose/releases/latest | jq .name -r)
+output='/usr/local/bin/docker-compose'
+curl -L https://github.com/docker/compose/releases/download/$compose_version/docker-compose-$(uname -s)-$(uname -m) -o $output
+chmod +x $output
+echo $(docker-compose --version)
+
+
+
+
+git submodule add [外部リポジトリ] [ローカルで格納したいディレクトリ]
+
+git submodule add https://github.com/kimny1226/proc.git sources
+
+
