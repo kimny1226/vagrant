@@ -3,7 +3,7 @@ services:
   web:
     container_name: web
     # user: "${UID}:${GID}"
-    user: "${UID}:${GID}"
+    # user: "${UID}:${GID}"
     # user: "vagrant:vagrant"
     build: ./docker/web
     depends_on:

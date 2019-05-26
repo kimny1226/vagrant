@@ -157,5 +157,7 @@ chmod 777 -R laravel_test/bootstrap/cache
 alias ll='ls -al'
 alias vssh='vagrant ssh -c "cd /vagrant; bash"';
 
+alias dc='docker-compose'
+
 
 docker-compose exec --user 1000 web bash
