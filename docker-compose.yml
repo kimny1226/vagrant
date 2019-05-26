@@ -1,16 +1,23 @@
 version: '3'
 services:
   web:
-    # build: .
-    build: ./docker/web
     container_name: web
+    # user: "${UID}:${GID}"
+    user: "${UID}:${GID}"
+    # user: "vagrant:vagrant"
+    build: ./docker/web
     depends_on:
       - db
       - redis
     volumes:
-      - ./docker/web/.:/var/www/html
-      - "./php.ini:/usr/local/etc/php/php.ini"
-      
+      # - ./sources/.:/var/www/html
+      # - ./sources/proc/.:/var/www/html
+      - ./sources/laravel_test/.:/var/www/html
+      # - ./sources/.:/var/www/html
+    ports:
+      - "80:80"
+      # - "443:443"
+
   redis:
     image: redis
     container_name: redis
@@ -28,4 +35,4 @@ services:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: lara
       MYSQL_USER: user
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: secret

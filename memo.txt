@@ -6,6 +6,21 @@ cat /etc/redhat-release
 vagrant plugin install vagrant-vbguest
 vagrant plugin install vagrant-docker-compose
 
+$ vagrant plugin list
+vagrant-docker-compose (1.3.0)
+vagrant-vbguest (0.16.0)
+
+
+$ An error occurred during installation of VirtualBox Guest Additions 5.1.38. Some functionality may not work as intended.
+$ In most cases it is OK that the "Window System drivers" installation failed.
+↓
+vagrant vbguest
+
+sudo yum -y install update kernel
+sudo yum -y install kernel-devel kernel-headers gcc gcc-c++
+
+
+sudo /etc/init.d/vboxadd setup
 
 ■CentOS7.5に最新バージョンのDockerをインストールする
 https://qiita.com/okcoder/items/e91f1e339c114e0be129
@@ -60,6 +75,10 @@ vagrant box remove CentOS7
 vagrant plugin list
 
 
+vagrant up --provision
+vagrant reload --provision
+
+
 [vagrant@localhost ~]$ docker -v
 Docker version 18.09.6, build 481bc77156
 [vagrant@localhost ~]$ docker-compose -v
@@ -70,3 +89,73 @@ docker-compose version 1.11.2, build dfed245
 
 docker-compose up -d --build
 
+
+
+
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    zlib1g-dev \
+    && docker-php-ext-install \
+    zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+RUN curl -s http://getcomposer.org/installer | php && \
+    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
+    mv composer.phar /usr/local/bin/composer
+
+
+
+
+sudo yum -y install epel-release.noarch
+sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+sudo yum -y install --enablerepo=remi,remi-php70 php php-devel php-mbstring php-pdo php-gd php-mysql php-xml
+
+$ sudo yum clean all
+
+$ curl -sS https://getcomposer.org/installer | php -- --install-dir=/tmp
+$ sudo mv /tmp/composer.phar /usr/local/bin/composer
+
+
+
+  ゲスト側に入れるか、コンテナ側で行うか。ホスト側で操作すれば済む
+  # composer install (php install)
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo yum -y install epel-release.noarch
+    sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+    sudo yum -y install --enablerepo=remi,remi-php70 php php-devel php-mbstring php-pdo php-gd php-mysql php-xml
+    sudo yum clean all
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/tmp
+    sudo mv /tmp/composer.phar /usr/local/bin/composer
+  SHELL
+
+
+
+composer create-project --prefer-dist laravel/laravel laravel_test 5.5.*
+
+php-devel php-mbstring php-pdo php-gd php-mysqlnd php-intl phpunit
+
+# chmod -R 777 storage
+# chmod -R 777 bootstrap/cache
+
+
+php+必要なもの
+sudo yum install -y --enablerepo=remi,remi-php72 php php-devel php-mbstring php-pdo php-xml php-zip1
+
+sudo yum install -y zip unzip
+
+
+docker-compose exec web bash
+
+
+chmod 777 -R storage
+chmod 777 -R laravel_test/storage
+chmod 777 -R laravel_test/bootstrap/cache
+
+
+
+alias ll='ls -al'
+alias vssh='vagrant ssh -c "cd /vagrant; bash"';
+
+
+docker-compose exec --user 1000 web bash
