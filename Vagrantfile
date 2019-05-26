@@ -48,7 +48,16 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "./sources", "/vagrant"
+  #config.vm.synced_folder "./sources", "/vagrant", type:"virtualbox" , mount_options: ['dmode=777','fmode=775']
+  config.vm.synced_folder "./", "/vagrant", type:"virtualbox" , mount_options: ['dmode=777','fmode=775']
+
+  # plugin前提
+  # vagrant plugin install vagrant-vbguest
+  # vagrant plugin install vagrant-docker-compose
+
+  # docker、docker-compose install
+  config.vm.provision :docker
+  config.vm.provision :docker_compose
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
