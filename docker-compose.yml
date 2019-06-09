@@ -10,6 +10,7 @@ services:
       - db
       - redis
     volumes:
+      - ./php.ini:/usr/local/etc/php/php.ini
       # - ./sources/.:/var/www/html
       # - ./sources/proc/.:/var/www/html
       - ./sources/laravel_pj/.:/var/www/html

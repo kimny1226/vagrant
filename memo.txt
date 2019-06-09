@@ -181,3 +181,4 @@ vagrant global-status --prune
 laravel関連
 
 php artisan key:generate
+php artisan migrate
