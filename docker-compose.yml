@@ -2,15 +2,12 @@ version: '3'
 services:
   web:
     container_name: web
-    # user: "${UID}:${GID}"
-    # user: "${UID}:${GID}"
-    # user: "vagrant:vagrant"
     build: ./docker/web
     depends_on:
       - db
       - redis
     volumes:
-      - ./php.ini:/usr/local/etc/php/php.ini
+      # - ./web/php.ini:/usr/local/etc/php/php.ini
       # - ./sources/.:/var/www/html
       # - ./sources/proc/.:/var/www/html
       - ./sources/laravel_pj/.:/var/www/html
@@ -27,9 +24,8 @@ services:
     # image: postgres
     image: mysql:5.6
     container_name: mysql5.6
-    # volumes_from:
-    #   - db_data:/var/lib/mysql
-    restart: always
+    volumes:
+    - mysql-db:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
@@ -37,3 +33,6 @@ services:
       MYSQL_DATABASE: lara
       MYSQL_USER: user
       MYSQL_PASSWORD: secret
+
+volumes:
+  mysql-db:
