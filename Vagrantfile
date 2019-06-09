@@ -19,7 +19,12 @@ Vagrant.configure("2") do |config|
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
-  config.vm.box_check_update = false
+  # config.vm.box_check_update = false
+
+  # vagrant-vbguestプラグインが入っている場合、自動更新を無効にする設定
+  if Vagrant.has_plugin?("vagrant-vbguest") then
+    config.vbguest.auto_update = false
+  end
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
@@ -49,8 +54,8 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
   # config.vm.synced_folder "./sources", "/vagrant", type:"virtualbox" , mount_options: ['dmode=777','fmode=775']
-  config.vm.synced_folder "./", "/vagrant", type:"virtualbox" , mount_options: ['dmode=777','fmode=775']
-
+  config.vm.synced_folder "./", "/vagrant", type:"virtualbox", mount_options: ['dmode=777','fmode=775']
+  
   # plugin前提
   # vagrant plugin install vagrant-vbguest
   # vagrant plugin install vagrant-docker-compose
@@ -92,4 +97,7 @@ Vagrant.configure("2") do |config|
   #   apt-get update
   #   apt-get install -y apache2
   # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+     echo "alias dc='docker-compose'" >> /home/vagrant/.bashrc
+  SHELL
 end

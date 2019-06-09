@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-RUN curl -s http://getcomposer.org/installer | php && \
-    echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
-    mv composer.phar /usr/local/bin/composer
+# RUN curl -s http://getcomposer.org/installer | php && \
+#     echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
+#     mv composer.phar /usr/local/bin/composer
+RUN useradd -u 1000 -m docker
+ENV APACHE_RUN_USER docker
+ENV APACHE_RUN_GROUP docker
