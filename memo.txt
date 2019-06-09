@@ -166,3 +166,18 @@ docker-compose exec --user 1000 web bash
 
 これも不要
   # config.vm.synced_folder "./", "/vagrant", type:"virtualbox", :owner => 'vagrant', :group => 'vagrant', mount_options: ['dmode=777','fmode=775']
+
+
+
+ゴミ掃除
+vagrant global-status
+
+
+vagrant global-status --prune
+
+
+
+
+laravel関連
+
+php artisan key:generate
