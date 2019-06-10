@@ -182,3 +182,13 @@ laravel関連
 
 php artisan key:generate
 php artisan migrate
+
+
+docker関連
+コンテナ削除
+docker ps -a
+docker rm 7a5a7211e0ce 476851e5d91a
+
+イメージ削除
+docker images
+docker rmi 7faa3c53e6d6
