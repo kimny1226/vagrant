@@ -6,18 +6,26 @@ FROM php:7.2-apache
 #     docker-php-ext-install pdo_mysql mysqli mbstring
 
 RUN apt-get update && apt-get install -y \
-    git \
-    unzip \
-    zlib1g-dev \
-    libicu-dev \
+        git \
+        unzip \
+        zlib1g-dev \
+        libicu-dev \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \
-    zip \
-    intl \
-    pdo_mysql \
+        zip \
+        intl \
+        mbstring \
+        pdo_mysql \
+    && pecl install xdebug \
+    && pecl install apcu \
+    && docker-php-ext-enable \
+        xdebug \
+        apcu \
+        opcache \
+    && a2enmod rewrite \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-RUN a2enmod rewrite
+
 # RUN curl -s http://getcomposer.org/installer | php && \
 #     echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
 #     mv composer.phar /usr/local/bin/composer
