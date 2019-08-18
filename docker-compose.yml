@@ -4,13 +4,15 @@ services:
     container_name: web
     build: ./docker/web
     depends_on:
-      - db
+      # - db
+      - db_admin
       - redis
     volumes:
       # - ./web/php.ini:/usr/local/etc/php/php.ini
       # - ./sources/.:/var/www/html
       # - ./sources/proc/.:/var/www/html
-      - ./sources/laravel_pj/.:/var/www/html
+      # - ./sources/laravel_pj/.:/var/www/html
+      - ./sources/admin/.:/var/www/html
       # - ./sources/.:/var/www/html
       - ./logs:/var/log/apache2
       # - ./docker/web/httpd-vhosts.conf:/etc/apache2/sites-available/httpd-vhosts.conf
@@ -23,21 +25,38 @@ services:
     image: redis
     container_name: redis
 
-  db:
+  # db:
+  #   # image: postgres
+  #   image: mysql:5.7
+  #   container_name: mysql5.7
+  #   # image: mysql:5.6
+  #   # container_name: mysql5.6
+  #   volumes:
+  #   - mysql-db:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpass
+  #     MYSQL_DATABASE: lara
+  #     MYSQL_USER: user
+  #     MYSQL_PASSWORD: secret
+
+  db_admin:
     # image: postgres
     image: mysql:5.7
-    container_name: mysql5.7
+    container_name: mysql5.7_admin
     # image: mysql:5.6
     # container_name: mysql5.6
     volumes:
-    - mysql-db:/var/lib/mysql
+    - mysql-db-admin:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: lara
+      MYSQL_DATABASE: admin
       MYSQL_USER: user
       MYSQL_PASSWORD: secret
 
 volumes:
-  mysql-db:
+  # mysql-db:
+  mysql-db-admin:

@@ -237,6 +237,12 @@ HostOS[Windows10]
     git (git install)
 
 
+# Composer並列化プラグイン
+composer global require hirak/prestissimo
+
+# アンインストール
+composer global remove hirak/prestissimo
+
 
 # CentOS7に手動でインストールする場合の中身(ローカルはpluginのが楽で記述も少ない)
   config.vm.provision "shell", inline: <<-SHELL
@@ -252,3 +258,13 @@ HostOS[Windows10]
     sudo gpasswd -a vagrant docker
     sudo systemctl restart docker
   SHELL
+
+
+
+# intl拡張モジュール 有効
+RUN apt-get update -y && apt-get install -y \
+    libicu-dev \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl
+# mod_rewrite 有効
+RUN a2enmod rewrite
