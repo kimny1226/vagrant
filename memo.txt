@@ -208,3 +208,47 @@ RUN unlink /etc/localtime
 RUN ln -s /usr/share/zoneinfo/Japan /etc/localtime
 
 CMD ["/bin/bash"]
+
+
+HostOS[Windows10]
+
+
+          GuestOS[centos/7]
+
+
+              Apache 2.4
+                  000-default.conf(DocumentRoot変更)
+                  
+
+              App
+  sources         
+    eccube        eccube
+    laravel       laravel
+
+              MySQL[<==>Amazon Aurora(MySQL)]
+
+              Redis[<==>Amazon ElastiCache(Redis)]
+
+
+  [CMD] HostOS側かGuestOS側にするのか。
+    php artisan (php install)
+    php bin/console
+    composer install (Composer install)
+    git (git install)
+
+
+
+# CentOS7に手動でインストールする場合の中身(ローカルはpluginのが楽で記述も少ない)
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo yum install -y yum-utils
+    sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    sudo yum makecache fast
+    sudo yum install -y docker-ce
+    sudo systemctl enable docker-ce
+    sudo systemctl start docker-ce
+    sudo curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` > docker-compose
+    sudo mv docker-compose /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    sudo gpasswd -a vagrant docker
+    sudo systemctl restart docker
+  SHELL
