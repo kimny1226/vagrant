@@ -268,3 +268,48 @@ RUN apt-get update -y && apt-get install -y \
     && docker-php-ext-install intl
 # mod_rewrite 有効
 RUN a2enmod rewrite
+
+
+
+
+# コンテナに入る
+docker exec -it mysql5.7_admin bash
+
+# dump出力
+root@51b16c09b13a:/# mysqldump -u user -p admin_db > admin_db.sql
+# ファイル確認(コンテナ内)
+root@51b16c09b13a:/# ls -l
+total 224
+-rw-r--r--.   1 root root 141619 Sep  8 12:49 admin_db.sql
+
+# コンテナID 表示
+[vagrant@localhost vagrant]$ sudo docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
+645f8b9197c8        vagrant_web         "docker-php-entrypoi…"   17 minutes ago      Up 16 minutes       0.0.0.0:80->80/tcp                  web
+25be92b88efc        redis               "docker-entrypoint.s…"   17 minutes ago      Up 17 minutes       6379/tcp                            redis
+51b16c09b13a        mysql:5.7           "docker-entrypoint.s…"   17 minutes ago      Up 17 minutes       0.0.0.0:3306->3306/tcp, 33060/tcp   mysql5.7_admin
+[vagrant@localhost vagrant]$ 
+
+# コンテナ内のファイルをホストにコピー
+sudo docker cp 51b16c09b13a:/admin_db.sql /vagrant
+
+# ファイル確認(ホスト側)
+[vagrant@localhost vagrant]$ ll /vagrant/
+total 154
+-rwxrwxr-x. 1 vagrant vagrant 141619 Sep  8 12:32 admin_db.sql
+
+
+
+
+
+# 別環境にて流し込み
+mysql -u root -p admin_db < admin_db.sql
+mysql -u user -p admin_db -h 192.168.33.10 < admin_db.sql
+
+# DB DUMP(外から繋がるならこれでOK)
+mysqldump -u user -p admin_db -h 192.168.33.10 > admin_db.sql
+
+# windowsでxamppなら、環境変数にPATH通しておくと楽
+D:\tools\xampp\mysql\bin
+D:\tools\xampp\php
+
