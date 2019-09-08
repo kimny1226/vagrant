@@ -57,17 +57,18 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder "./sources", "/vagrant", type:"virtualbox" , mount_options: ['dmode=777','fmode=775']
 
   ### virtualbox(デフォルト)
-  # config.vm.synced_folder "./", "/vagrant", type:"virtualbox", mount_options: ['dmode=777','fmode=775']
+  config.vm.synced_folder "./", "/vagrant", type:"virtualbox", mount_options: ['dmode=777','fmode=775']
 
   ### rsync(virtualboxよりも早い＆除外対象の指定が可能)
-  config.vm.synced_folder "./", "/vagrant", type:"rsync", mount_options: ['dmode=777','fmode=775'],
-    # 同期除外リスト
-    rsync__exclude: [
-      "sources/admin/.git/",
-      "sources/admin/var/",
-      "sources/laravel_pj/",
-    ]
-  
+  ### windowsだと、別途rsync.exeのインストールと設定が必要
+  # config.vm.synced_folder "./", "/vagrant", type:"rsync", mount_options: ['dmode=777','fmode=775'],
+  #   # 同期除外リスト
+  #   rsync__exclude: [
+  #     "sources/admin/.git/",
+  #     "sources/admin/var/",
+  #     "sources/laravel_pj/",
+  #   ]
+
   # plugin前提
   # vagrant plugin install vagrant-vbguest
   # vagrant plugin install vagrant-docker-compose
