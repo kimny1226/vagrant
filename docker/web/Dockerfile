@@ -26,6 +26,17 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# SSL対応
+# ssl-cert オレオレ証明書用
+RUN apt-get update && apt-get install -y \
+        libssl-dev \
+        openssl \
+        ssl-cert \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && a2enmod ssl \
+    && a2ensite default-ssl
+
 # RUN curl -s http://getcomposer.org/installer | php && \
 #     echo "export PATH=${PATH}:/var/www/vendor/bin" >> ~/.bashrc && \
 #     mv composer.phar /usr/local/bin/composer
